@@ -1,5 +1,17 @@
-.map {
-    width: 1280px;
+/* размер контейнера карты */
+.mapsize {
+    width: 1903px;
     height: 400px;
+}
+
+/* размещение карты внутриконтейнера */
+.map {
+    width: 100%;
+    height: 100%;
     background-color: black;
 }
+
+/* Удалене меток яндекса на карте */
+[class*="ymaps3x0--map-copyrights"] {
+    display: none !important;
+  }
