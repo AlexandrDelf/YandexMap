@@ -1,47 +1,36 @@
-async function initMap() {
-  await ymaps3.ready;
+main();
 
-  const {YMap, YMapDefaultSchemeLayer, YMapMarker, YMapFeatureDataSource, YMapLayer } = ymaps3;
+async function main() {
+    await ymaps3.ready;
 
-  const map = new YMap(
-      document.getElementById('app'),
-      {
-          location: {
-              center: [37.588144, 55.733842],
-              zoom: 10
-          }
-      }
-  );
+    // Добовляем всякую херню из апишки
+    const {YMap, YMapDefaultSchemeLayer, YMapMarker, YMapControls, YMapDefaultFeaturesLayer} = ymaps3;
 
-  map.addChild(new YMapDefaultSchemeLayer());
-  map.addChild(new YMapDefaultFeaturesLayer());
+    // Импортим какуюто херню для контролов 
+    //const {YMapZoomControl} = await ymaps3.import('@yandex/ymaps3-controls@0.0.1');
+    
+    // Импортим какуюто херню для маркеров
+    const {YMapDefaultMarker} = await ymaps3.import('@yandex/ymaps3-markers@0.0.1');
 
-map.addChild(new YMapFeatureDataSource({id: 'popups'}));
-map.addChild(new YMapLayer({source: 'popups'}));
+    // Собираем настройки карты и ставим ее в блок на странице
+    const LOCATION = {center: [37.64, 55.76], zoom: 10};
+    map = new YMap(document.getElementById('app'), {location: LOCATION});
 
-const INC_POINT = {coordinates: [37.588144, 55.733842], title: 'Marker inc #0'};
-const INC2_POINT = {coordinates: [37.588144, 55.733842], color: '#fcc', draggable: true};
+    // Я так понимаю задаем схему для карты ( цвет фото ид... )
+    map.addChild((scheme = new YMapDefaultSchemeLayer()));
 
-const POINTS = [
-    {
-        coordinates: [37.588144, 55.733842],
-        color: '#477510',
-        title: 'nose color Donatello',
-        subtitle: 'Very long but incredibly interesting text',
-        draggable: true
-      }
-];
+    // Добовляет контролы увеличения
+    //map.addChild(new YMapControls({position: 'right'}).addChild(new YMapZoomControl({})));
 
-function circle(props) {
-    const circle = document.createElement('div');
-    circle.classList.add('circle');
-    circle.style.color = props.color;
-    props.radius && circle.style.setProperty('--radius', props.radius);
-    props.icon && circle.style.setProperty('--icon', props.icon);
-    circle.title = props.title;
-    return circle;
+    // Это тоже чет интересное ( хз без этого метка не ставится ) 
+    map.addChild(new YMapDefaultFeaturesLayer({id: 'features'}));
+    
+    // Собираем метку которя будет на карте
+    const INC_POINT = {coordinates: [37.64, 55.76], title: 'Тута стоит метка'};
+    const marker = new YMapDefaultMarker(INC_POINT);
+
+    // Добовляем метку на карту
+    map.addChild(marker);
+
+    
 }
-  return circle;
-}
-  
-initMap();
