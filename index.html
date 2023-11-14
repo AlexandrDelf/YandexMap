@@ -6,36 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Интерактивная карта яндекс</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://api-maps.yandex.ru/v3/?apikey=ac8c8791-c38d-4d3b-8c60-12a8d99ac331&lang=ru_RU"></script>
-  <script>
-        main();
-
-        async function main() {
-            await ymaps3.ready;
-            const {YMap, YMapDefaultSchemeLayer, YMapMarker, YMapControls, YMapDefaultFeaturesLayer} = ymaps3;
-
-            const {YMapZoomControl} = await ymaps3.import('@yandex/ymaps3-controls@0.0.1');
-            const {YMapDefaultMarker} = await ymaps3.import('@yandex/ymaps3-markers@0.0.1');
-
-            const LOCATION = {center: [37.64, 55.76], zoom: 10};
-            map = new YMap(document.getElementById('map'), {location: LOCATION});
-
-            map.addChild((scheme = new YMapDefaultSchemeLayer()));
-            map.addChild(new YMapControls({position: 'right'}).addChild(new YMapZoomControl({})));
-            map.addChild(new YMapDefaultFeaturesLayer({id: 'features'}));
-
-            //map.addChild(new YMapDefaultSchemeLayer());
-
-            const INC_POINT = {coordinates: [37.64, 55.76], title: 'Marker inc #0'};
-            const marker = new YMapDefaultMarker(INC_POINT);
-            map.addChild(marker);
-
-            updateTitle();
-        }
-    </script>
-  </head>
-
-  <body>
-    <div id="map" style="width: 600px; height: 400px"></div>
-  </body>
+  <script src="https://api-maps.yandex.ru/v3/?apikey=f22758f3-f95b-41b3-bf76-870c79c2d2f6&lang=ru_RU"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <div id="app" class="mapsize"></div>
+    
+</body>
 </html>
