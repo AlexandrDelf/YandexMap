@@ -30,7 +30,14 @@ async function main() {
     const marker = new YMapDefaultMarker(INC_POINT);
 
     // Добовляем метку на карту
-    map.addChild(marker);
+    //map.addChild(marker);
+
+    //const LOCATION = {center: [37.623082, 55.75254], zoom: 9};
+    const el = document.createElement('img');
+    el.className = 'my-marker';
+    el.src = './хай.png';
+    el.onclick = () => map.update({location: {...LOCATION, duration: 400}});
+    map.addChild(new YMapMarker({coordinates: LOCATION.center}, el));    
 
     
 }

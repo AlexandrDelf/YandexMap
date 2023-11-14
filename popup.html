@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <script src="https://api-maps.yandex.ru/v3/?apikey=ac8c8791-c38d-4d3b-8c60-12a8d99ac331&lang=en_US" type="text/javascript"></script>
+    <script src="./common.js"></script>
+
+    <script>
+      window.map = null;
+
+      main();
+      async function main() {
+        await ymaps3.ready;
+        const {
+          YMap,
+          YMapDefaultSchemeLayer,
+          YMapDefaultFeaturesLayer,
+          YMapFeatureDataSource,
+          YMapLayer,
+          YMapControls,
+          YMapMarker
+        } = ymaps3;
+
+        const LOCATION = {center: [37.623082, 55.5], zoom: 9};
+
+        const LEFT_MARKER = [...LOCATION.center];
+        LEFT_MARKER[0] -= 0.3;
+        LEFT_MARKER[1] -= 0.3;
+        const RIGHT_MARKER = [...LOCATION.center];
+        RIGHT_MARKER[0] += 0.3;
+        RIGHT_MARKER[1] -= 0.3;
+        const TOP_MARKER = [...LOCATION.center];
+
+        const TOP_DEFAULT_MARKER = [...LOCATION.center];
+        TOP_DEFAULT_MARKER[1] += 0.3;
+
+        const RIGHT_DEFAULT_MARKER = [...LOCATION.center];
+        RIGHT_DEFAULT_MARKER[0] += 0.1;
+        RIGHT_DEFAULT_MARKER[1] += 0.2;
+
+        const LEFT_DEFAULT_MARKER = [...LOCATION.center];
+        LEFT_DEFAULT_MARKER[0] += -0.1;
+        LEFT_DEFAULT_MARKER[1] += 0.2;
+
+        const TOP_DEFAULT_MARKER_POPUP = {
+          content: 'Good text here',
+          position: 'top',
+          hidesMarker: true
+        };
+        
+        const {YMapZoomControl} = await ymaps3.import('@yandex/ymaps3-controls@0.0.1');
+        const {YMapDefaultMarker} = await ymaps3.import('@yandex/ymaps3-markers@0.0.1');
+
+        map = new YMap(document.getElementById('app'), {location: LOCATION});
+        map.addChild(new YMapControls({position: 'right'}).addChild(new YMapZoomControl({})));
+
+        map.addChild(new YMapDefaultSchemeLayer());
+        map.addChild(new YMapDefaultFeaturesLayer());
+
+        map.addChild(new YMapFeatureDataSource({id: 'popups'}));
+        map.addChild(new YMapLayer({source: 'popups'}));
+
+        class MyMarkerWithPopup extends ymaps3.YMapComplexEntity {
+          _onAttach() {
+            this._actualize();
+          }
+          _onDetach() {
+            this.marker = null;
+          }
+          _onUpdate(props) {
+            if (props.coordinates) {
+              this.marker?.update({coordinates: props.coordinates});
+            }
+            this._actualize();
+          }
+
+          _actualize() {
+            const props = this._props;
+            this._lazyCreatePopup();
+            this._lazyCreateMarker();
+
+            if (!this._state.popupOpen || !props.popupHidesMarker) {
+              this.addChild(this.marker);
+            } else if (this.marker) {
+              this.removeChild(this.marker);
+            }
+
+            if (this._state.popupOpen) {
+              this.popupElement.style.display = 'flex';
+              this._markerElement.removeChild(this._beaconElement);
+            } else if (this.popupElement) {
+              this.popupElement.style.display = 'none';
+              this._markerElement.appendChild(this._beaconElement);
+            }
+          }
+          _lazyCreateMarker() {
+            if (this.marker) return;
+
+            const pinElement = document.createElement('div');
+            pinElement.className = 'my-marker__pin';
+
+            const beaconElement = document.createElement('span');
+            beaconElement.className = 'my-marker__beacon';
+            this._beaconElement = beaconElement;
+
+            const animation1 = document.createElement('div');
+            animation1.className = 'my-marker__animation';
+
+            const animation2 = animation1.cloneNode(true);
+            animation2.classList.add('my-marker__animation-delay');
+            beaconElement.append(animation1, animation2);
+
+            const markerElement = document.createElement('div');
+            markerElement.className = 'my-marker';
+            markerElement.append(pinElement, beaconElement);
+
+            this._markerElement = markerElement;
+
+            pinElement.onclick = () => {
+              this._state.popupOpen = true;
+              this._actualize();
+            };
+
+            const container = document.createElement('div');
+            container.append(this._markerElement, this.popupElement);
+
+            this.marker = new YMapMarker({coordinates: this._props.coordinates}, container);
+          }
+
+          _lazyCreatePopup() {
+            if (this.popupElement) return;
+
+            const element = document.createElement('div');
+            element.className = 'popup';
+
+            const textElement = document.createElement('div');
+            textElement.className = 'popup__text';
+            textElement.textContent = this._props.popupContent;
+
+            const closeBtn = document.createElement('div');
+            closeBtn.className = 'popup__close';
+            closeBtn.textContent = '✖';
+            closeBtn.onclick = () => {
+              this._state.popupOpen = false;
+              this._actualize();
+            };
+
+            const alertBtn = document.createElement('button');
+            alertBtn.className = 'popup__alert-btn';
+            alertBtn.textContent = '👉 Click here';
+            alertBtn.onclick = () => {
+              alert('lorem ipsum dolor sit amet!');
+              closeBtn.onclick();
+            };
+
+            textElement.append(alertBtn);
+            element.append(textElement, closeBtn);
+
+            this.popupElement = element;
+          }
+
+          constructor(props) {
+            super(props);
+            this._state = {popupOpen: false};
+          }
+        }
+
+        const rightPopupContent = (close) => {
+          const container = document.createElement('div');
+          container.innerHTML = `<div class="right-popup">
+                    <button class="right-popup__close">✖</button>
+                    <img class="right-popup__img" src="./img/flower.svg">
+                    <p>Flowers studio</p>
+                    <button class="right-popup__accept">Read more</button>
+                </div>`;
+          container.querySelector('.right-popup__close').onclick = close;
+
+          return container;
+        };
+
+        const leftPopupContent = (close) => {
+          const container = document.createElement('div');
+          container.innerHTML = `<div class="left-popup">
+                    <button class="left-popup__close">✖</button>
+                    <div class="left-popup__img"></div>
+                    <div class="left-popup__info">
+                        <h1 class="left-popup__title">Car repair</h1>
+                        <p class="left-popup__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        <div class="left-popup__item"><img src="./img/call.svg"> 023 4545 0999</div>
+                        <div class="left-popup__item"><img src="./img/email.svg"> bob@sitename.com</div>
+                        <div class="left-popup__btn">
+                            <img class="left-popup__btn-img" src="./img/route.svg">
+                            <p class="left-popup__text">Directions</p>
+                        </div>
+                    </div>
+                </div>`;
+          container.querySelector('.left-popup__close').onclick = close;
+
+          return container;
+        };
+
+        const RIGHT_DEFAULT_MARKER_POPUP = {
+          content: rightPopupContent,
+          position: 'right'
+        };
+
+        const LEFT_DEFAULT_MARKER_POPUP = {
+          content: leftPopupContent,
+          position: 'left'
+        };
+
+        map.addChild(
+          (leftMarker = new MyMarkerWithPopup({
+            coordinates: LEFT_MARKER,
+            popupContent: 'Incredible content!'
+          }))
+        );
+        map.addChild(
+          (rightMarker = new MyMarkerWithPopup({
+            coordinates: RIGHT_MARKER,
+            popupContent: 'More very interesting text!'
+          }))
+        );
+        map.addChild(
+          (topMarker = new MyMarkerWithPopup({
+            coordinates: TOP_MARKER,
+            popupContent: 'Good text here'
+          }))
+        );
+
+        map.addChild(
+          new YMapDefaultMarker({
+            coordinates: TOP_DEFAULT_MARKER,
+            popup: TOP_DEFAULT_MARKER_POPUP
+          })
+        );
+
+        map.addChild(
+          new YMapDefaultMarker({
+            coordinates: LEFT_DEFAULT_MARKER,
+            popup: LEFT_DEFAULT_MARKER_POPUP
+          })
+        );
+
+        map.addChild(
+          (marker = new YMapDefaultMarker({
+            coordinates: RIGHT_DEFAULT_MARKER,
+            popup: RIGHT_DEFAULT_MARKER_POPUP
+          }))
+        );
+      }
+    </script>
+
+    <!-- prettier-ignore -->
+    <style> html, body, #app { width: 100%; height: 100%; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; } .toolbar { position: absolute; z-index: 1000; top: 0; left: 0; display: flex; align-items: center; padding: 16px; } .toolbar a { padding: 16px; }  </style>
+    <link rel="stylesheet" href="./common.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>
