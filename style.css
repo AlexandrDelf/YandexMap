@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic);
+
 /* размер контейнера карты */
 .mapsize {
     width: 100%;
@@ -5,14 +7,50 @@
     /* background-color: black; */
 }
 
+body {
+    margin: 0;
+}
+
 /* Удалене меток яндекса на карте */
 [class*="ymaps3x0--map-copyrights"] {
     display: none !important;
   }
 
-  .infobanner {
-    min-height: 390px;
-    padding: 50px 50px 100px 30px;
-    border-radius: 20px;
-    color: #fff;
-  }
+.infobanner {
+top: 80px;
+left: 20%;
+height: 90px;
+padding: 25px 50px 100px 30px;
+border-radius: 10px;
+color: #000000;
+z-index: 1000;
+position: absolute;
+background-color: #fcfcfc;
+border-left: 10px solid #FF3333;
+font-family: 'PT Sans', sans-serif;
+box-shadow: 1px 1px 10px 1px #00000050 ;
+}
+
+.phone {
+    padding: 0px 0px 25px;
+    font-size: 19px;
+    font-weight: bold; 
+    color: #191919;
+}
+.phone span {
+    color: #FF3333;
+}
+
+.adress {
+    width: 300px;
+    padding: 0px 0px 25px;
+    font-size: 16px;
+    color: #191919;
+}
+
+.openinghours {
+    width: 300px;
+    padding: 0px 0px 25px;
+    font-size: 16px;
+    color: #191919;
+}

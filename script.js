@@ -21,11 +21,12 @@ async function main() {
     zoom: 16,
   };
 
-  const TOP_DEFAULT_MARKER = [...LOCATION.center];
+  // Создание константы с расположением маркера с тем же значением, что и центр основной карты.
+  const DEFAULT_MARKER = [...LOCATION.center];
 
   // Определение свойств всплывающего окна для маркера.
   // Содержимое - "Good text here", положение - сверху, скрывает маркер - true.
-  const TOP_DEFAULT_MARKER_POPUP = {
+  const DEFAULT_MARKER_POPUP = {
     content: "Good text here",
     position: "top",
     hidesMarker: true,
@@ -43,7 +44,7 @@ async function main() {
   // Создаёт слой со стандартной схемой.
   map.addChild(new YMapDefaultSchemeLayer());
 
-  // Создаёт слой с объектами по умолчанию
+  // Создаёт слой с объектами по умолчанию.
   map.addChild(new YMapDefaultFeaturesLayer());
 
   // Добавляет источник данных объектов на карту с идентификатором "popups".
@@ -99,8 +100,8 @@ async function main() {
 
   const content = document.createElement('div');
   const marker_my = new ymaps3.YMapMarker({
-      coordinates: TOP_DEFAULT_MARKER,
-      popup: TOP_DEFAULT_MARKER_POPUP,
+      coordinates: DEFAULT_MARKER,
+      popup: DEFAULT_MARKER_POPUP,
       onClick: () => map.update({location: {...LOCATION, duration: 400}})
   },content);
   
@@ -112,8 +113,8 @@ async function main() {
   // добавляет на карту маркер с заданными координатами и свойствами всплывающего окна.
   // map.addChild(
   //   new YMapDefaultMarker({
-  //     coordinates: TOP_DEFAULT_MARKER,
-  //     popup: TOP_DEFAULT_MARKER_POPUP,
+  //     coordinates: DEFAULT_MARKER,
+  //     popup: DEFAULT_MARKER_POPUP,
   //   })
   // );
 }
