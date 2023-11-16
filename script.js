@@ -96,17 +96,24 @@ async function main() {
     }
   }
 
-  const customMarker = document.createElement('img');
-  customMarker.className = 'custom-marker';
-  customMarker.src = './img/custom-marker.png';
-  customMarker.style.cssText = 'margin-top:-50px;'
-  map.addChild(new YMapMarker({coordinates: LOCATION.center}, customMarker));
 
-  // добавляет на карту маркер с заданными координатами и свойствами всплывающего окна.
-  map.addChild(
-    new YMapDefaultMarker({
+  const content = document.createElement('div');
+  const marker_my = new ymaps3.YMapMarker({
       coordinates: TOP_DEFAULT_MARKER,
       popup: TOP_DEFAULT_MARKER_POPUP,
-    })
-  );
+      onClick: () => map.update({location: {...LOCATION, duration: 400}})
+  },content);
+  
+  
+  content.innerHTML = '<div style="position: absolute; width: 50px; height: 50px;left:-25px; top: -50px; display: block;"><img src="./img/custom-marker.svg"></div>';
+  
+  map.addChild(marker_my);
+
+  // добавляет на карту маркер с заданными координатами и свойствами всплывающего окна.
+  // map.addChild(
+  //   new YMapDefaultMarker({
+  //     coordinates: TOP_DEFAULT_MARKER,
+  //     popup: TOP_DEFAULT_MARKER_POPUP,
+  //   })
+  // );
 }

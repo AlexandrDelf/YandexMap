@@ -10,4 +10,9 @@
     display: none !important;
   }
 
-  
+  .infobanner {
+    min-height: 390px;
+    padding: 50px 50px 100px 30px;
+    border-radius: 20px;
+    color: #fff;
+  }
