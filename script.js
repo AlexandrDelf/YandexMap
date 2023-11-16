@@ -101,7 +101,7 @@ async function main() {
   const content = document.createElement('div');
   const marker_my = new ymaps3.YMapMarker({
       coordinates: DEFAULT_MARKER,
-      popup: DEFAULT_MARKER_POPUP,
+      // popup: DEFAULT_MARKER_POPUP,
       onClick: () => map.update({location: {...LOCATION, duration: 400}})
   },content);
   
