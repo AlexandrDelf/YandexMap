@@ -96,10 +96,11 @@ async function main() {
     }
   }
 
-  // const customMarker = document.createElement('img');
-  // customMarker.className = 'custom-marker';
-  // customMarker.src = './img/custom-marker.png';
-  // map.addChild(new YMapMarker({coordinates: LOCATION.center}, customMarker));
+  const customMarker = document.createElement('img');
+  customMarker.className = 'custom-marker';
+  customMarker.src = './img/custom-marker.png';
+  customMarker.style.cssText = 'margin-top:-50px;'
+  map.addChild(new YMapMarker({coordinates: LOCATION.center}, customMarker));
 
   // добавляет на карту маркер с заданными координатами и свойствами всплывающего окна.
   map.addChild(
