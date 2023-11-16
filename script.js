@@ -12,6 +12,7 @@ async function main() {
     YMapDefaultFeaturesLayer,
     YMapFeatureDataSource,
     YMapLayer,
+    YMapMarker
   } = ymaps3;
 
   // Определение координат и уровня масштабирования для карты.
@@ -94,6 +95,11 @@ async function main() {
       }
     }
   }
+
+  // const customMarker = document.createElement('img');
+  // customMarker.className = 'custom-marker';
+  // customMarker.src = './img/custom-marker.png';
+  // map.addChild(new YMapMarker({coordinates: LOCATION.center}, customMarker));
 
   // добавляет на карту маркер с заданными координатами и свойствами всплывающего окна.
   map.addChild(
