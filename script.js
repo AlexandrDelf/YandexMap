@@ -4,7 +4,13 @@ async function main() {
     await ymaps3.ready;
 
     // Добовляем всякую херню из апишки
-    const {YMap, YMapDefaultSchemeLayer, YMapMarker, YMapControls, YMapDefaultFeaturesLayer} = ymaps3;
+    const {
+        YMap, 
+        YMapDefaultSchemeLayer, 
+        YMapMarker, 
+        YMapControls, 
+        YMapDefaultFeaturesLayer
+    } = ymaps3;
 
     // Импортим какуюто херню для контролов 
     //const {YMapZoomControl} = await ymaps3.import('@yandex/ymaps3-controls@0.0.1');
@@ -35,9 +41,23 @@ async function main() {
     //const LOCATION = {center: [37.623082, 55.75254], zoom: 9};
     const el = document.createElement('img');
     el.className = 'my-marker';
-    el.src = './хай.png';
+    el.src = './img/custom-marker.svg';
     el.onclick = () => map.update({location: {...LOCATION, duration: 400}});
-    map.addChild(new YMapMarker({coordinates: LOCATION.center}, el));    
+    map.addChild(new YMapMarker({coordinates: LOCATION.center}, el));  
+
+    ///////////////////////////////////////////////////////////////////////
+    // правельная вставка
+    const content = document.createElement('div');
+    const marker_my = new ymaps3.YMapMarker({
+        coordinates: LOCATION.center,
+        // сюда можно прикрутить попап
+        onClick: () => alert('click')
+    },content);
+    
+    // попап можно сразу тут поставить и скрыть при клике показывать
+    content.innerHTML = '<div style="position: absolute; width:100px; height: 100px;left:-25px; top: -50px; display: block;"><img src="./img/custom-marker.svg"></div>';
+    
+    map.addChild(marker_my);  
 
     
 }
