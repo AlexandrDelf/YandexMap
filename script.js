@@ -68,68 +68,68 @@ async function main() {
 
 
 
-  class CustomMarkerWithPopup extends ymaps3.YMapComplexEntity {
-    _onAttach() {
-      this._actualize();
-    }
-    _onDetach() {
-      this.marker = null;
-    }
-    _onUpdate(props) {
-      if (props.coordinates) {
-        this.marker?.update({coordinates: props.coordinates});
-      }
-      this._actualize();
-    }
+  // class CustomMarkerWithPopup extends ymaps3.YMapComplexEntity {
+  //   _onAttach() {
+  //     this._actualize();
+  //   }
+  //   _onDetach() {
+  //     this.marker = null;
+  //   }
+  //   _onUpdate(props) {
+  //     if (props.coordinates) {
+  //       this.marker?.update({coordinates: props.coordinates});
+  //     }
+  //     this._actualize();
+  //   }
 
-    _actualize() {
-      const props = this._props;
-      this._lazyCreatePopup();
+  //   _actualize() {
+  //     const props = this._props;
+  //     this._lazyCreatePopup();
   
-      if (!this._state.popupOpen || !props.popupHidesMarker) {
-        this.addChild(this.marker);
-      } else if (this.marker) {
-        this.removeChild(this.marker);
-      }
+  //     if (!this._state.popupOpen || !props.popupHidesMarker) {
+  //       this.addChild(this.marker);
+  //     } else if (this.marker) {
+  //       this.removeChild(this.marker);
+  //     }
 
-      if (this._state.popupOpen) {
-        this.popupElement.style.display = 'flex';
-        this._markerElement.removeChild(this._beaconElement);
-      } else if (this.popupElement) {
-        this.popupElement.style.display = 'none';
-        this._markerElement.appendChild(this._beaconElement);
-      }
-    }
+  //     if (this._state.popupOpen) {
+  //       this.popupElement.style.display = 'flex';
+  //       this._markerElement.removeChild(this._beaconElement);
+  //     } else if (this.popupElement) {
+  //       this.popupElement.style.display = 'none';
+  //       this._markerElement.appendChild(this._beaconElement);
+  //     }
+  //   }
 
-    _lazyCreatePopup() {
-      if (this.popupElement) return;
+  //   _lazyCreatePopup() {
+  //     if (this.popupElement) return;
 
-      const element = document.createElement('div');
-      element.className = 'popup';
+  //     const element = document.createElement('div');
+  //     element.className = 'popup';
 
-      const textElement = document.createElement('div');
-      textElement.className = 'popup__text';
-      textElement.textContent = this._props.popupContent;
+  //     const textElement = document.createElement('div');
+  //     textElement.className = 'popup__text';
+  //     textElement.textContent = this._props.popupContent;
 
-      const closeBtn = document.createElement('div');
-      closeBtn.className = 'popup__close';
-      closeBtn.textContent = '✖';
-      closeBtn.onclick = () => {
-        this._state.popupOpen = false;
-        this._actualize();
-      };
+  //     const closeBtn = document.createElement('div');
+  //     closeBtn.className = 'popup__close';
+  //     closeBtn.textContent = '✖';
+  //     closeBtn.onclick = () => {
+  //       this._state.popupOpen = false;
+  //       this._actualize();
+  //     };
 
-      textElement.append(alertBtn);
-      element.append(textElement, closeBtn);
+  //     textElement.append(alertBtn);
+  //     element.append(textElement, closeBtn);
 
-      this.popupElement = element;
-      }
+  //     this.popupElement = element;
+  //     }
 
-      constructor(props) {
-        super(props);
-        this._state = {popupOpen: false};
-      }
-    }
+  //     constructor(props) {
+  //       super(props);
+  //       this._state = {popupOpen: false};
+  //     }
+  //   }
 
     // const PopupContent = (close) => {
     //   const container = document.createElement('div');
@@ -144,11 +144,15 @@ async function main() {
     // };
 
 
-    function show_popup(){
-      const popup = document.querySelector("#popup");
-      popup.cssText = "display: flex;";
-      console.log("РАБОТАЕТ");
-    }
+    // function show_popup(){
+    //   const popup = document.querySelector("#popup");
+    //   popup.style.cssText = "display: flex;";
+      
+    //   console.log("РАБОТАЕТ");
+    // }
+
+
+
 
 
 
@@ -164,10 +168,28 @@ async function main() {
   content.innerHTML = `<div class="custom-marker">
           <img src="./img/custom-marker.svg"></div>
           <div class="popup" id="popup">
+            <div class="popup__close">✖</div>
             <div class="popup__text"></div>
           </div>`;
     // '<div style="position: absolute; width: 50px; height: 50px;left:-25px; top: -50px; display: block;"><img src="./img/custom-marker.svg"></div>';
 
   map.addChild(customMarker);
+
+  
+  const marker = document.querySelector('.custom-marker')
+  const popup = document.querySelector('.popup')  
+  const close_btn = document.querySelector('.popup__close')
+  console.log(marker);
+
+
+
+
+  marker.addEventListener('click', () => {
+  popup.style.display = 'flex'
+})
+
+close_btn.addEventListener('click', () => {
+  popup.style.display = 'none'
+})
 
 }

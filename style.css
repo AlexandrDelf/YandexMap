@@ -17,18 +17,18 @@ body {
   }
 
 .infobanner {
-top: 80px;
-left: 20%;
-height: 90px;
-padding: 25px 50px 100px 30px;
-border-radius: 10px;
-color: #000000;
-z-index: 1000;
-position: absolute;
-background-color: #fff;
-border-left: 10px solid #FF3333;
-font-family: 'PT Sans', sans-serif;
-box-shadow: 1px 1px 10px 1px #00000050 ;
+    top: 80px;
+    left: 20%;
+    height: 90px;
+    padding: 25px 50px 100px 30px;
+    border-radius: 10px;
+    color: #000000;
+    z-index: 1000;
+    position: absolute;
+    background-color: #fff;
+    border-left: 10px solid #FF3333;
+    font-family: 'PT Sans', sans-serif;
+    box-shadow: 1px 1px 10px 1px #00000050 ;
 }
 
 .phone {
@@ -66,8 +66,10 @@ box-shadow: 1px 1px 10px 1px #00000050 ;
 }
 
 .popup {
-    display: block;
+    display: none;
+    position: relative;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     width: 150px;
     padding: 15px 15px 30px;
@@ -78,7 +80,22 @@ box-shadow: 1px 1px 10px 1px #00000050 ;
     box-shadow: 0 6px 18px -5px #ff333341;    
 }
 
-  .popup::before {
+
+.popup__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    font-size: 16px;
+    color: #c0c5cb;
+    cursor: pointer;
+}
+
+/* .popup__close:hover {
+    cursor: pointer;
+} */
+
+  /* .popup::before {
     position: absolute;
   
     width: 100%;
@@ -106,18 +123,12 @@ box-shadow: 1px 1px 10px 1px #00000050 ;
     padding: 16px 24px;
   
     text-align: center;
-  }
+  } */
 
   
-  .popup__close {
-    position: absolute;
-    top: -15px;
-    right: -25px;
+
   
-    width: 24px;
-  }
-  
-  .popup__close:hover {
+  /* .popup__close:hover {
     cursor: pointer;
   }
   
@@ -175,7 +186,7 @@ box-shadow: 1px 1px 10px 1px #00000050 ;
     border-radius: 5px;
     background-color: #ed6755;
     box-shadow: 0 6px 18px -5px rgba(237, 103, 85, 1);
-}
+} */
 
 
 
