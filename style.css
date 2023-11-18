@@ -25,7 +25,7 @@ border-radius: 10px;
 color: #000000;
 z-index: 1000;
 position: absolute;
-background-color: #fcfcfc;
+background-color: #fff;
 border-left: 10px solid #FF3333;
 font-family: 'PT Sans', sans-serif;
 box-shadow: 1px 1px 10px 1px #00000050 ;
@@ -54,5 +54,129 @@ box-shadow: 1px 1px 10px 1px #00000050 ;
     font-size: 16px;
     color: #191919;
 }
+
+/* маркер */
+.custom-marker {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    left: -25px;
+    top: -50px;
+    display: block;
+}
+
+.popup {
+    display: block;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+    padding: 15px 15px 30px;
+    text-align: center;
+    color: #000000;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 6px 18px -5px #ff333341;    
+}
+
+  .popup::before {
+    position: absolute;
+  
+    width: 100%;
+    height: 100%;
+  
+    content: '';
+  
+    opacity: 0.5;
+    border-radius: 0.5rem;
+    background: linear-gradient(to left, #ff5770, #c42da8, #9e16c3, #c42da8, #ff5770);
+    background-size: 200% 200%;
+  
+    animation: animateGlow 1.25s linear infinite;
+  }
+  
+  .popup__text {
+    position: relative;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
+    width: 150px;
+    padding: 16px 24px;
+  
+    text-align: center;
+  }
+
+  
+  .popup__close {
+    position: absolute;
+    top: -15px;
+    right: -25px;
+  
+    width: 24px;
+  }
+  
+  .popup__close:hover {
+    cursor: pointer;
+  }
+  
+  @keyframes activateMarker {
+    0% {
+      opacity: 1;
+  
+      transform: scale(0.1);
+    }
+  
+    100% {
+      opacity: 0;
+  
+      transform: scale(2.5);
+    }
+  }
+  
+  @keyframes animateGlow {
+    0% {
+      background-position: 0% 50%;
+    }
+  
+    100% {
+      background-position: 200% 50%;
+    }
+  }
+  
+
+.popup__close{
+  align-self: flex-end;
+  width: 30px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #c0c5cb;
+  border: none;
+  background-color: transparent;
+}
+
+.popup__img {
+    width: 82px;
+  }
+
+.popup p {
+    margin-bottom: 15px;  
+    font-size: 16px;
+}
+
+.popup__accept {
+    width: 70%;
+    padding: 10px;  
+    font-size: 14px;
+    cursor: pointer;  
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    background-color: #ed6755;
+    box-shadow: 0 6px 18px -5px rgba(237, 103, 85, 1);
+}
+
+
 
 

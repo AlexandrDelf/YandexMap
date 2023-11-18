@@ -12,7 +12,7 @@ async function main() {
     YMapDefaultFeaturesLayer,
     YMapFeatureDataSource,
     YMapLayer,
-    YMapMarker
+    YMapMarker,
   } = ymaps3;
 
   // Определение координат и уровня масштабирования для карты.
@@ -53,68 +53,121 @@ async function main() {
   // Добавляет слой на карту с источником данных "popups".
   map.addChild(new YMapLayer({ source: "popups" }));
 
-  // Создание класса который наследуется от класса YMapComplexEntity из библиотеки ymaps3.
-  class MyMarkerWithPopup extends ymaps3.YMapComplexEntity {
-    // Обработка событий присоединения.
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  class CustomMarkerWithPopup extends ymaps3.YMapComplexEntity {
     _onAttach() {
       this._actualize();
     }
-
-    // Обработка событий отсоединения.
     _onDetach() {
       this.marker = null;
     }
-
-    // Обработка событий обновления объекта.
     _onUpdate(props) {
       if (props.coordinates) {
-        this.marker?.update({ coordinates: props.coordinates });
+        this.marker?.update({coordinates: props.coordinates});
       }
       this._actualize();
     }
 
-    // функция в JavaScript классе, которая создает и настраивает маркер и его всплывающее окно на карте.
     _actualize() {
-      // Условие проверяет, открыто ли всплывающее окно маркера и должен ли он скрываться.
-      // Если всплывающее окно не открыто или маркер должен быть виден, то маркер добавляется на карту.
-      // Если всплывающее окно открыто и маркер должен быть скрыт, то маркер удаляется с карты.
+      const props = this._props;
+      this._lazyCreatePopup();
+  
       if (!this._state.popupOpen || !props.popupHidesMarker) {
         this.addChild(this.marker);
       } else if (this.marker) {
         this.removeChild(this.marker);
       }
 
-      // Условие проверяет, открыто ли всплывающее окно. Если оно открыто, то стиль отображения устанавливается на "flex".
-      // Если нет, то он устанавливается на "none". Также проверяется наличие элемента маяка во всплывающем окне,
-      // если он есть, то он удаляется или добавляется в зависимости от состояния видимости.
       if (this._state.popupOpen) {
-        this.popupElement.style.display = "flex";
+        this.popupElement.style.display = 'flex';
         this._markerElement.removeChild(this._beaconElement);
       } else if (this.popupElement) {
-        this.popupElement.style.display = "none";
+        this.popupElement.style.display = 'none';
         this._markerElement.appendChild(this._beaconElement);
       }
     }
-  }
+
+    _lazyCreatePopup() {
+      if (this.popupElement) return;
+
+      const element = document.createElement('div');
+      element.className = 'popup';
+
+      const textElement = document.createElement('div');
+      textElement.className = 'popup__text';
+      textElement.textContent = this._props.popupContent;
+
+      const closeBtn = document.createElement('div');
+      closeBtn.className = 'popup__close';
+      closeBtn.textContent = '✖';
+      closeBtn.onclick = () => {
+        this._state.popupOpen = false;
+        this._actualize();
+      };
+
+      textElement.append(alertBtn);
+      element.append(textElement, closeBtn);
+
+      this.popupElement = element;
+      }
+
+      constructor(props) {
+        super(props);
+        this._state = {popupOpen: false};
+      }
+    }
+
+    // const PopupContent = (close) => {
+    //   const container = document.createElement('div');
+    //   container.innerHTML = `<div class="popup">
+    //             <button class="popup__close">✖</button>
+    //             <img class="popup__img" src="./img/logo.png">
+    //             <p>This studio</p>
+    //             </div>`;                
+    //   container.querySelector('.popup__close').onclick = close;
+
+    //   return container;
+    // };
 
 
-  const content = document.createElement('div');
-  const marker_my = new ymaps3.YMapMarker({
-      coordinates: DEFAULT_MARKER,
-      // popup: DEFAULT_MARKER_POPUP,
-      onClick: () => map.update({location: {...LOCATION, duration: 400}})
-  },content);
-  
-  
-  content.innerHTML = '<div style="position: absolute; width: 50px; height: 50px;left:-25px; top: -50px; display: block;"><img src="./img/custom-marker.svg"></div>';
-  
-  map.addChild(marker_my);
+    function show_popup(){
+      const popup = document.querySelector("#popup");
+      popup.cssText = "display: flex;";
+      console.log("РАБОТАЕТ");
+    }
 
-  // добавляет на карту маркер с заданными координатами и свойствами всплывающего окна.
-  // map.addChild(
-  //   new YMapDefaultMarker({
-  //     coordinates: DEFAULT_MARKER,
-  //     popup: DEFAULT_MARKER_POPUP,
-  //   })
-  // );
+
+
+  const content = document.createElement("div");
+  const customMarker = new ymaps3.YMapMarker(
+    {
+      coordinates: DEFAULT_MARKER,      
+      onClick: () => show_popup(),
+    },
+    content
+  );
+
+  content.innerHTML = `<div class="custom-marker">
+          <img src="./img/custom-marker.svg"></div>
+          <div class="popup" id="popup">
+            <div class="popup__text"></div>
+          </div>`;
+    // '<div style="position: absolute; width: 50px; height: 50px;left:-25px; top: -50px; display: block;"><img src="./img/custom-marker.svg"></div>';
+
+  map.addChild(customMarker);
+
 }
